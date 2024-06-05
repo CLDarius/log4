@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FCPN</title>
+</head>
+<body>
+  <h1>Convergencia de la serie 1/(2n+1)(2n+2) a ln(2)</h1>
+
+  <form id="myForm">
+    <label for="n">Ingrese el valor de n:</label>
+    <input type="number" id="n" name="n" min="1" required>
+    <button type="submit">Calcular</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('myForm');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const n = parseInt(document.getElementById('n').value);
+
+      // Función para calcular la suma de la serie
+      function calculateSeriesSum(n) {
+        // Crear el vector n
+        const nVector = Array.from({ length: n }, (_, i) => i);
+
+        // Calcular el vector de términos 1/(2n+1)(2n+2)
+        const termsVector = nVector.map(i => 1 / ((2 * i + 1) * (2 * i + 2)));
+
+        // Calcular la suma de los términos
+        const sum = termsVector.reduce((a, b) => a + b, 0);
+
+        // Calcular ln(2)
+        const ln_2 = Math.log(2);
+
+        // Mostrar los resultados
+        return {
+          sum: sum,
+          ln_2: ln_2,
+          difference: Math.abs(sum - ln_2)
+        };
+      }
+
+      // Calcular la suma para n = 50, 500 y 5000
+      const results = [
+        { n: 50, ...calculateSeriesSum(50) },
+        { n: 500, ...calculateSeriesSum(500) },
+        { n: 5000, ...calculateSeriesSum(5000) }
+      ];
+
+      // Mostrar los resultados
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = `
+        ${results.map(result => `
+          <h2>Para n = ${result.n}:</h2>
+          <p>Suma: ${result.sum.toFixed(10)}</p>
+          <p>Valor de ln(2): ${result.ln_2.toFixed(10)}</p>
+          <p>Diferencia: ${result.difference.toFixed(10)}</p>
+        `).join('')}
+      `;
+    });
+  </script>
+</body>
+</html>
